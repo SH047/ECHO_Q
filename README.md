@@ -66,7 +66,7 @@ All STL files are located in the `/stl` directory.
 On the Raspberry Pi:
 ```bash
 # Clone the repo
-git clone [https://github.com/yourusername/ECHO-Q.git](https://github.com/yourusername/ECHO-Q.git)
+git clone https://github.com/SH047/ECHO_Q
 
 # Launch the ROS Master, Lidar, and Drivers
 roslaunch echo_q_bringup robot.launch

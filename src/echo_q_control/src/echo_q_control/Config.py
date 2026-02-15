@@ -2,21 +2,18 @@ import numpy as np
 from enum import Enum
 import math as m
 
-# NOTE: You will need the input package for this import to work later
-# from echo_q_input_interfacing.HardwareConfig import PS4_COLOR, PS4_DEACTIVATED_COLOR
-
 class Configuration:
     def __init__(self):
         self.ps4_color = {"r": 255, "g": 0, "b": 255}
         self.ps4_deactivated_color = {"r": 0, "g": 0, "b": 0}
-        
-        # --- COMMANDS ---
-        self.max_x_velocity = 0.50 
-        self.max_y_velocity = 0.25
-        self.max_yaw_rate = 1.0
+
+        #################### COMMANDS ####################
+        self.max_x_velocity = 0.80  # INCREASED SPEED
+        self.max_y_velocity = 0.45
+        self.max_yaw_rate = 1.25
         self.max_pitch = 30.0 * np.pi / 180.0
 
-        # --- MOVEMENT PARAMS ---
+        #################### MOVEMENT PARAMS ####################
         self.z_time_constant = 0.02
         self.z_speed = 0.06
         self.pitch_deadband = 0.05
@@ -26,28 +23,28 @@ class Configuration:
         self.yaw_time_constant = 0.3
         self.max_stance_yaw = 1.2
         self.max_stance_yaw_rate = 1.0
-        
-        # --- INPUT SETTINGS ---
+
+        # FINAL INPUT FIX: Stable Deadband and Acceleration
         self.x_time_constant = 0.25 
         self.y_time_constant = 0.25
         self.yaw_time_constant = 0.30
-        self.velocity_deadband = 0.15 
-        self.yaw_deadband = 0.15
+        self.velocity_deadband = 0.25 
+        self.yaw_deadband = 0.25
 
-        # --- STANCE ---
+        #################### STANCE ####################
         self.delta_x = 0.09      
-        self.rear_leg_x_shift = -0.02
-        self.front_leg_x_shift = 0.02
+        self.rear_leg_x_shift = -0.04
+        self.front_leg_x_shift = 0.00
         self.delta_y = 0.085     
-        self.default_z_ref = -0.16 
+        self.default_z_ref = -0.15 # Safe Squat Height
 
-        # --- SWING ---
+        #################### SWING ######################
         self.z_coeffs = None
-        self.__z_clearance = 0.06 
+        self.__z_clearance = 0.06 # High Step Clearance
         self.alpha = 0.5
         self.beta = 0.5
 
-        # --- GAIT ---
+        #################### GAIT ####################
         self.dt = 0.01
         self.num_phases = 4
         self.contact_phases = np.array(
@@ -59,7 +56,7 @@ class Configuration:
         self.overlap_time = 0.04 
         self.swing_time = 0.07 
 
-        # --- GEOMETRY ---
+        ######################## GEOMETRY ####################
         self.LEG_FB = 0.170
         self.LEG_LR = 0.0975
         self.LEG_ORIGINS = np.array([

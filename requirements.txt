@@ -1,0 +1,6 @@
+rospkg
+numpy
+pyserial
+adafruit-circuitpython-servokit
+flask
+opencv-python

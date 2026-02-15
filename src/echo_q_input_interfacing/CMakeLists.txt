@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.0.2)
+project(echo_q_input_interfacing)
+find_package(catkin REQUIRED COMPONENTS rospy sensor_msgs)
+catkin_package()
+catkin_install_python(PROGRAMS scripts/InputInterface.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})

@@ -13,6 +13,11 @@
     <node pkg="echo_q_control" type="echo_q_driver.py" name="echo_q_driver" output="screen">
         </node>
     
-    </launch>
+   
 
 <node pkg="echo_q_peripheral_interfacing" type="app.py" name="web_interface" output="screen" />
+<node pkg="rosserial_python" type="serial_node.py" name="serial_node" output="screen">
+        <param name="port" value="/dev/ttyS0"/>
+        <param name="baud" value="9600"/>
+    </node>
+    </launch>

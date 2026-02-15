@@ -9,6 +9,7 @@ from echo_q_control.Kinematics import inverse_kinematics
 from echo_q_control.State import State, BehaviorState
 from echo_q_control.Gait import GaitController
 from echo_q_control.Command import Command
+from std_msgs.msg import Float32 # Needed for IMU
 
 # Import Hardware & Input
 from echo_q_hardware_interfacing.HardwareInterface import HardwareInterface
@@ -29,9 +30,15 @@ class EchoQ_Driver:
         # 3. Initialize Input (PS4 Joystick)
         self.input_interface = InputInterface(self.config)
         
+        # --- NEW: IMU SUBSCRIBERS ---
+        # Listens to the pitch/roll topics from Arduino
+        rospy.Subscriber("/dingo_pitch", Float32, self.imu_pitch_callback)
+        rospy.Subscriber("/dingo_roll", Float32, self.imu_roll_callback)
+        # ---------------------------
+
         # 4. Initialize Gait Controller
         self.gait_controller = GaitController(self.config)
-        
+
         # 5. Timing
         self.rate = rospy.Rate(50) # Run at 50Hz
         self.last_time = rospy.Time.now()
@@ -48,46 +55,48 @@ class EchoQ_Driver:
             command = self.input_interface.get_command(self.state, 50)
             
             # --- B. Update State Machine ---
-            if command.joystick_control_event == 1:
+            if command.joystick_control_event == 1: 
                 # Toggle between REST and TROT
                 if self.state.behavior_state == BehaviorState.REST:
                     self.state.behavior_state = BehaviorState.TROT
                     rospy.loginfo("Mode: TROT (Active)")
                 else:
                     self.state.behavior_state = BehaviorState.REST
-                    rospy.loginfo("Mode: REST (Relaxed)")
+                    rospy.loginfo("Mode: REST (Relaxed)") 
             
             # --- C. Execute Behavior ---
             if self.state.behavior_state == BehaviorState.REST:
-                # Relax motors (PWM = 0) to save battery/heat
-                # Or hold a sitting pose if preferred
-                # self.hardware.relax_all_motors()
+                # Relax motors or hold pose
                 pass
-                
+            
             elif self.state.behavior_state == BehaviorState.TROT:
-                # 1. Update Gait Phase (Swing/Stance)
+                # 1. Update Gait Phase
                 self.gait_controller.update(current_time.to_sec())
-                
-                # 2. Calculate Foot Trajectories (The "Swing" logic)
-                # (Simplified placeholder for the full swing controller)
-                # In a full impl, we'd use a SwingController class here.
-                # For now, we assume stance to test connectivity.
-                
-                # 3. Inverse Kinematics (XYZ -> Angles)
-                # Using default stance height from Config
+       
+                # 2. Trajectory Calculation (Placeholder for Swing Control)
+                # In full version, check self.gait_controller.contacts
+            
+                # 3. Inverse Kinematics
                 default_stance = self.config.default_stance
-                
-                # Apply height/pitch/roll from command
                 feet_positions = default_stance.copy()
-                feet_positions[2, :] += command.height # Add height offset
+                
+                # Add Height/Roll/Pitch from Command + IMU Correction
+                feet_positions[2, :] += command.height
                 
                 # Solve Angles
                 joint_angles = inverse_kinematics(feet_positions, self.config)
                 
                 # 4. Send to Servos
                 self.hardware.set_actuator_positions(joint_angles)
-
+            
             self.rate.sleep()
+
+    # --- NEW: IMU CALLBACK FUNCTIONS ---
+    def imu_pitch_callback(self, msg):
+        self.state.pitch = msg.data
+
+    def imu_roll_callback(self, msg):
+        self.state.roll = msg.data
 
 if __name__ == '__main__':
     try:

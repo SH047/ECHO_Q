@@ -2,13 +2,16 @@ import numpy as np
 from enum import Enum
 import math as m
 
+# NOTE: Input config import is commented out until the input package is fully set up
+# from echo_q_input_interfacing.HardwareConfig import PS4_COLOR, PS4_DEACTIVATED_COLOR
+
 class Configuration:
     def __init__(self):
         self.ps4_color = {"r": 255, "g": 0, "b": 255}
         self.ps4_deactivated_color = {"r": 0, "g": 0, "b": 0}
-
+        
         #################### COMMANDS ####################
-        self.max_x_velocity = 0.80  # INCREASED SPEED
+        self.max_x_velocity = 0.80  # INCREASED SPEED (Was 0.50)
         self.max_y_velocity = 0.45
         self.max_yaw_rate = 1.25
         self.max_pitch = 30.0 * np.pi / 180.0
@@ -23,7 +26,7 @@ class Configuration:
         self.yaw_time_constant = 0.3
         self.max_stance_yaw = 1.2
         self.max_stance_yaw_rate = 1.0
-
+        
         # FINAL INPUT FIX: Stable Deadband and Acceleration
         self.x_time_constant = 0.25 
         self.y_time_constant = 0.25
@@ -118,3 +121,47 @@ class Configuration:
     @property
     def phase_length(self):
         return 2 * self.overlap_ticks + 2 * self.swing_ticks
+
+class SimulationConfig:
+    def __init__(self):
+        self.XML_IN = "pupper.xml"
+        self.XML_OUT = "pupper_out.xml"
+        self.START_HEIGHT = 0.3
+        self.MU = 1.5
+        self.DT = 0.001
+        self.JOINT_SOLREF = "0.001 1"
+        self.JOINT_SOLIMP = "0.9 0.95 0.001"
+        self.GEOM_SOLREF = "0.01 1"
+        self.GEOM_SOLIMP = "0.9 0.95 0.001"
+        G = 220
+        m_rotor = 0.016
+        r_rotor = 0.005
+        self.ARMATURE = G ** 2 * m_rotor * r_rotor ** 2
+        self.REV_DAMPING = 1.049 
+        self.SERVO_REV_KP = 1000 # Stable high stiffness
+        self.MAX_JOINT_TORQUE = 3.0
+        self.REVOLUTE_RANGE = 1.57
+
+class Leg_linkage:
+    def __init__(self, configuration: Configuration):
+        # * YOUR MEASUREMENTS (IN MM) *
+        self.a = 27.0   # Servo Horn
+        self.b = 100.0  # Connecting Rod
+        self.c = 26.0   # Lower Leg Lever
+        self.d = 100.0  # Upper Leg Distance
+        
+        # Default Params (Likely unused but kept for compatibility)
+        self.e = 67.1
+        self.f = 130.0
+        self.g = 37
+        self.h = 43
+        
+        self.upper_leg_length = configuration.L2 * 1000
+        self.lower_leg_length = configuration.L3 * 1000
+        self.lower_leg_bend_angle = m.radians(0)
+        self.i = self.upper_leg_length
+        self.hip_width = configuration.L1 * 1000
+        self.gamma = m.atan(28.80 / 20.20)
+        acos_arg = (self.c * 2 + self.h * 2 - self.e ** 2) / (2 * self.c * self.h)
+        acos_arg = max(-1.0, min(1.0, acos_arg))
+        self.EDC = m.acos(acos_arg)

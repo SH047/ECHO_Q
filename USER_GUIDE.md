@@ -1,10 +1,10 @@
-# 📘 ECHO-Q User Manual
+#  ECHO-Q User Manual
 
 This guide provides step-by-step instructions for assembling, installing, and operating the **ECHO-Q Quadruped Robot**.
 
 ---
 
-## 🛠️ 1. Hardware Requirements
+##  1. Hardware Requirements
 To build ECHO-Q, you need the following components:
 
 ### Core Electronics
@@ -24,7 +24,7 @@ To build ECHO-Q, you need the following components:
 
 ---
 
-## 🔌 2. Wiring Diagram
+##  2. Wiring Diagram
 
 ### Raspberry Pi 4 GPIO
 | Pin | Function | Connection |
@@ -45,7 +45,7 @@ To build ECHO-Q, you need the following components:
 
 ---
 
-## 💻 3. Software Installation
+##  3. Software Installation
 
 ### Prerequisite
 * **OS:** Ubuntu 20.04 LTS (Focal Fossa) server installed on Raspberry Pi.
@@ -81,7 +81,7 @@ To build ECHO-Q, you need the following components:
 
 ---
 
-## 🎮 4. Operation
+## 4. Operation
 
 ### Starting the Robot
 1.  Power on the ECHO-Q (ensure LiPo is charged).
@@ -109,7 +109,7 @@ Once the robot is running, open a browser on your laptop/phone and visit:
 
 ---
 
-## ⚠️ Troubleshooting
+##  Troubleshooting
 * **Servos Jitter:** Check battery voltage. If < 7.4V, recharge immediately.
 * **"Device not found":** Ensure `ros-noetic-joy` is installed and controller is paired via Bluetooth.
 * **Lidar Error:** Check if `/dev/ttyUSB0` exists. You may need to swap USB ports.

@@ -43,10 +43,10 @@ Most robot dogs are either too expensive or too fragile. ECHO-Q hits the sweet s
 * **Languages:** Python (High-level/AI), C++ (Kinematics Engine)
 * **Input:** Wireless Gamepad (PS4/Xbox) or Keyboard Teleop
 
----
+<img width="1280" height="1218" alt="image" src="https://github.com/user-attachments/assets/8657d0a5-74cd-4416-bd5e-01ac86aaaa45" />
 
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. The Build
 All STL files are located in the `/stl` directory. 

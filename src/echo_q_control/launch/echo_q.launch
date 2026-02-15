@@ -14,3 +14,5 @@
         </node>
     
     </launch>
+
+<node pkg="echo_q_peripheral_interfacing" type="app.py" name="web_interface" output="screen" />

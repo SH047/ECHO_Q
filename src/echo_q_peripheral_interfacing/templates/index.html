@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ECHO-Q Control Center</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #222; color: #fff; text-align: center; }
+        h1 { color: #00ffcc; }
+        .container { display: flex; flex-direction: column; align-items: center; margin-top: 50px; }
+        img { border: 2px solid #00ffcc; border-radius: 10px; max-width: 80%; height: auto; }
+        .status { margin-top: 20px; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐕 ECHO-Q Live Feed</h1>
+        
+        <img src="{{ url_for('video_feed') }}" alt="Waiting for Camera...">
+        
+        <div class="status">
+            <p>Status: <strong>Online</strong></p>
+            <p>Mode: <strong>Teleoperation</strong></p>
+        </div>
+    </div>
+</body>
+</html>

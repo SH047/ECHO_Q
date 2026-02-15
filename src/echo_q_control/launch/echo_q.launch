@@ -1,0 +1,16 @@
+<launch>
+    <param name="joy_node/dev" value="/dev/input/js0" />
+    <node pkg="joy" type="joy_node" name="joy_node" output="screen" />
+
+    <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" output="screen">
+        <param name="serial_port"         type="string" value="/dev/ttyUSB0"/>
+        <param name="serial_baudrate"     type="int"    value="115200"/>
+        <param name="frame_id"            type="string" value="laser"/>
+        <param name="inverted"            type="bool"   value="false"/>
+        <param name="angle_compensate"    type="bool"   value="true"/>
+    </node>
+
+    <node pkg="echo_q_control" type="echo_q_driver.py" name="echo_q_driver" output="screen">
+        </node>
+    
+    </launch>

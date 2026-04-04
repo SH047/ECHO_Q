@@ -1,0 +1,70 @@
+<launch>
+  <!--
+    ECHO-Q Top-Level Bringup
+    Usage:
+      roslaunch echo_q_bringup robot.launch                        # teleoperation
+      roslaunch echo_q_bringup robot.launch slam:=true rviz:=true  # SLAM mapping
+      roslaunch echo_q_bringup robot.launch navigation:=true       # autonomous nav
+  -->
+  <arg name="slam"       default="false"/>
+  <arg name="navigation" default="false"/>
+  <arg name="rviz"       default="false"/>
+  <arg name="lidar"      default="true"/>
+  <arg name="web"        default="true"/>
+
+  <!-- RPLiDAR A1 -->
+  <group if="$(arg lidar)">
+    <node name="rplidar_node" pkg="rplidar_ros" type="rplidarNode" output="screen">
+      <param name="serial_port"      value="/dev/ttyUSB0"/>
+      <param name="serial_baudrate"  value="115200"/>
+      <param name="frame_id"         value="laser"/>
+      <param name="angle_compensate" value="true"/>
+    </node>
+  </group>
+
+  <!-- Arduino IMU (rosserial) -->
+  <node name="serial_node" pkg="rosserial_python" type="serial_node.py" output="screen">
+    <param name="port" value="/dev/ttyUSB1"/>
+    <param name="baud" value="115200"/>
+  </node>
+
+  <!-- PS4 Joystick -->
+  <node name="joy_node" pkg="joy" type="joy_node" output="screen">
+    <param name="dev"              value="/dev/input/js0"/>
+    <param name="deadzone"         value="0.05"/>
+    <param name="autorepeat_rate"  value="20.0"/>
+  </node>
+
+  <!-- Static TF: base_link → laser (LiDAR mounted 15 cm forward, 5 cm up) -->
+  <node name="tf_base_laser" pkg="tf" type="static_transform_publisher"
+        args="0.15 0.0 0.05 0 0 0 base_link laser 50"/>
+  <!-- Static TF: base_link → imu_link -->
+  <node name="tf_base_imu" pkg="tf" type="static_transform_publisher"
+        args="0.0 0.0 0.02 0 0 0 base_link imu_link 50"/>
+
+  <!-- Core locomotion node (50 Hz) -->
+  <node name="echo_q_driver" pkg="echo_q_control" type="echo_q_driver.py"
+        output="screen" respawn="true" respawn_delay="2.0"/>
+
+  <!-- Flask web dashboard -->
+  <group if="$(arg web)">
+    <node name="echo_q_web" pkg="echo_q_peripheral_interfacing" type="app.py" output="screen"/>
+  </group>
+
+  <!-- SLAM -->
+  <group if="$(arg slam)">
+    <include file="$(find echo_q_slam)/launch/slam.launch"/>
+  </group>
+
+  <!-- Navigation -->
+  <group if="$(arg navigation)">
+    <include file="$(find echo_q_navigation)/launch/navigation.launch">
+      <arg name="slam" value="$(arg slam)"/>
+    </include>
+  </group>
+
+  <!-- RViz -->
+  <group if="$(arg rviz)">
+    <node name="rviz" pkg="rviz" type="rviz" output="screen"/>
+  </group>
+</launch>

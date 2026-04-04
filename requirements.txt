@@ -1,6 +1,13 @@
-rospkg
-numpy
-pyserial
-adafruit-circuitpython-servokit
-flask
-opencv-python
+# ECHO-Q Python dependencies
+# Install: pip3 install -r requirements.txt --break-system-packages
+
+numpy>=1.21.0
+pyserial>=3.5
+adafruit-circuitpython-servokit>=1.3.0
+opencv-python>=4.5.0
+flask>=2.0.0
+flask-cors>=3.0.10
+rospkg>=1.4.0
+psutil>=5.9.0
+pytest>=7.0.0
+pytest-cov>=4.0.0

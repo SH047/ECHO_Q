@@ -1,12 +1,16 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>echo_q_control</name>
-  <version>0.0.1</version>
-  <description>Control package for ECHO-Q Quadruped</description>
+  <version>1.0.0</version>
+  <description>Core locomotion: IK, gait, FSM for ECHO-Q.</description>
   <maintainer email="shreyas@example.com">Shreyas S Rai</maintainer>
   <license>MIT</license>
   <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>rospy</build_depend>
   <exec_depend>rospy</exec_depend>
-  <exec_depend>numpy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>echo_q_utilities</exec_depend>
 </package>

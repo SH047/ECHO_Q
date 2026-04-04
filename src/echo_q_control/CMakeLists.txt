@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.0.2)
+project(echo_q_control)
+find_package(catkin REQUIRED COMPONENTS rospy std_msgs sensor_msgs geometry_msgs nav_msgs tf2_ros)
+catkin_package(CATKIN_DEPENDS rospy std_msgs sensor_msgs geometry_msgs nav_msgs tf2_ros)
+catkin_python_setup()
+catkin_install_python(PROGRAMS scripts/echo_q_driver.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})

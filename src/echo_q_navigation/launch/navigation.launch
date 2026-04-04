@@ -1,0 +1,35 @@
+<launch>
+  <arg name="map_file" default="$(find echo_q_navigation)/maps/default_map.yaml"/>
+  <arg name="slam"     default="false"/>
+
+  <group unless="$(arg slam)">
+    <node name="map_server" pkg="map_server" type="map_server"
+          args="$(arg map_file)" output="screen"/>
+    <node name="amcl" pkg="amcl" type="amcl" output="screen">
+      <param name="odom_frame_id"  value="odom"/>
+      <param name="base_frame_id"  value="base_link"/>
+      <param name="global_frame_id" value="map"/>
+      <param name="min_particles"  value="500"/>
+      <param name="max_particles"  value="2000"/>
+      <remap from="scan"           to="/scan"/>
+      <remap from="odom"           to="/echo_q/odom"/>
+    </node>
+  </group>
+
+  <node name="move_base" pkg="move_base" type="move_base" output="screen">
+    <param name="base_global_planner" value="navfn/NavfnROS"/>
+    <param name="base_local_planner"  value="dwa_local_planner/DWAPlannerROS"/>
+    <rosparam file="$(find echo_q_navigation)/config/costmap_common_params.yaml"
+              command="load" ns="global_costmap"/>
+    <rosparam file="$(find echo_q_navigation)/config/costmap_common_params.yaml"
+              command="load" ns="local_costmap"/>
+    <rosparam file="$(find echo_q_navigation)/config/global_costmap_params.yaml" command="load"/>
+    <rosparam file="$(find echo_q_navigation)/config/local_costmap_params.yaml"  command="load"/>
+    <rosparam file="$(find echo_q_navigation)/config/dwa_local_planner_params.yaml" command="load"/>
+    <remap from="odom"    to="/echo_q/odom"/>
+    <remap from="cmd_vel" to="/move_base/cmd_vel"/>
+  </node>
+
+  <node name="echo_q_nav_bridge" pkg="echo_q_navigation"
+        type="navigation_bridge.py" output="screen"/>
+</launch>

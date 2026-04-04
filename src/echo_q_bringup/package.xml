@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>echo_q_bringup</name>
+  <version>1.0.0</version>
+  <description>Top-level bringup launch files for ECHO-Q.</description>
+  <maintainer email="shreyas@example.com">Shreyas S Rai</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>echo_q_control</exec_depend>
+  <exec_depend>echo_q_navigation</exec_depend>
+  <exec_depend>echo_q_slam</exec_depend>
+  <exec_depend>rplidar_ros</exec_depend>
+  <exec_depend>joy</exec_depend>
+</package>

@@ -1,47 +1,38 @@
+#!/usr/bin/env python3
+"""Phase-based diagonal trot gait controller."""
 import numpy as np
+from echo_q_utilities.Utilities import swing_trajectory
 
 class GaitController:
     def __init__(self, config):
         self.config = config
-        self.phase_length = config.overlap_ticks + config.swing_ticks
-        self.last_phase_change_time = 0
-        self.time_in_phase = 0
-        self.current_phase_index = 0
-        
-        # The contact phases are defined in Config.py (e.g., [[1,1,1,0], ...])
-        # 1 = Stance (Foot on ground)
-        # 0 = Swing (Foot in air)
-        self.contacts = config.contact_phases[0]
+        self.phase  = 0
+        self.tick   = 0
+        self._swing_start = config.default_stance.copy()
 
-    def update(self, current_time):
-        """
-        Updates the contact state of the robot based on the current time.
-        """
-        # Calculate how much time has passed since the last update
-        self.time_in_phase += (current_time - self.last_phase_change_time)
-        self.last_phase_change_time = current_time
-        
-        # Calculate the duration of one "tick" in seconds
-        tick_duration = self.config.dt
-        
-        # Convert elapsed time to "ticks"
-        ticks_passed = int(self.time_in_phase / tick_duration)
-        
-        # Check if it is time to switch to the next row in the gait matrix
-        phase_duration_ticks = self.config.phase_ticks[self.current_phase_index]
-        
-        if ticks_passed > phase_duration_ticks:
-            # Reset the counter
-            self.time_in_phase = 0
-            
-            # Move to the next phase index (loop back to 0 if at the end)
-            self.current_phase_index = (self.current_phase_index + 1) % self.config.num_phases
-            
-            # Update the contact array (this tells the Controller which feet are down)
-            self.contacts = self.config.contact_phases[self.current_phase_index]
+    def update(self, current_time, command_velocity, default_stance):
+        self.tick += 1
+        if self.tick >= int(self.config.phase_ticks[self.phase]):
+            self.tick  = 0
+            self.phase = (self.phase + 1) % self.config.num_phases
+
+        contacts       = self.config.contact_phases[self.phase].astype(bool)
+        foot_positions = default_stance.copy()
+        swing_phase    = np.clip(self.tick / max(self.config.swing_ticks, 1), 0.0, 1.0)
+
+        for leg in range(4):
+            if not contacts[leg]:
+                step    = command_velocity * self.config.swing_time * 0.5
+                landing = default_stance[:, leg].copy()
+                landing[0] += step[0]; landing[1] += step[1]
+                foot_positions[:, leg] = swing_trajectory(
+                    swing_phase, self._swing_start[:, leg], landing,
+                    self.config.z_clearance)
+            else:
+                self._swing_start[:, leg] = foot_positions[:, leg]
+
+        return foot_positions, contacts
 
     def reset(self):
-        """Resets the gait cycle to the beginning."""
-        self.current_phase_index = 0
-        self.time_in_phase = 0
-        self.contacts = self.config.contact_phases[0]
+        self.phase = 0; self.tick = 0
+        self._swing_start = self.config.default_stance.copy()

@@ -34,9 +34,12 @@ INVERSION_MASK = np.array([[1,   0,   0,   1],   # Hip
 
 # Tune these degree offsets until the robot stands level at default_z_ref.
 #                                          FR    FL    BR    BL
-CALIBRATION_OFFSETS = np.array([[ 15,   95,   95,    3],   # Hip
-                                [ 60,    1,   60,    8],   # Thigh
-                                [110, -110,  150,  -80]], dtype=float)  # Calf
+# Tune these degree offsets until the robot stands level at default_z_ref.
+# Last updated: physically measured on assembled ECHO-Q hardware.
+#                                          FR    FL    BR    BL
+CALIBRATION_OFFSETS = np.array([[ 15,   95,   95,    3],   # Hip   (FL & BR confirmed at 95)
+                                [ 60,    1,   60,    8],   # Thigh (unchanged)
+                                [ 90,  140,  130,  120]], dtype=float)  # Calf (updated from hardware)
 
 class HardwareInterface:
     def __init__(self, config):

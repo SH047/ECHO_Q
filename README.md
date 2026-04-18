@@ -271,9 +271,9 @@ sudo chmod 666 /dev/i2c-1     # I2C (PCA9685)
 ```python
 # Tune these offsets (degrees) until the robot stands level
 CALIBRATION_OFFSETS = np.array([
-    [15,  95,  95,   3],   # Hip
-    [60,   1,  60,   8],   # Thigh
-    [110,-110, 150, -80],  # Calf
+    [ 15,  95,  95,   3],   # Hip   (FL & BR confirmed at 95)
+    [ 60,   1,  60,   8],   # Thigh (unchanged)
+    [ 90, 140, 130, 120],   # Calf  (updated from hardware)
 ])
 ```
 

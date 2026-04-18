@@ -15,9 +15,28 @@ try:
 except ImportError:
     _log = print
 
-SERVO_CHANNELS = np.array([[0,4,8,12],[1,5,9,13],[2,6,10,14]], dtype=int)
-INVERSION_MASK = np.array([[1,0,0,1],[0,1,0,1],[0,1,0,1]], dtype=int)
-CALIBRATION_OFFSETS = np.array([[15,95,95,3],[60,1,60,8],[110,-110,150,-80]], dtype=float)
+# Column order matches JOINT_NAMES in echo_q_driver.py: col0=FR, col1=FL, col2=BR, col3=BL
+# Row order: row0=Hip, row1=Thigh, row2=Calf
+#
+#                                        FR   FL   BR   BL
+SERVO_CHANNELS = np.array([[0,   4,   8,  12],   # Hip    channels
+                           [1,   5,   9,  13],   # Thigh  channels
+                           [2,   6,  10,  14]], dtype=int)  # Calf channels
+
+# 1 = invert (180 - angle), 0 = normal
+# Hips:   FR(col0) and BL(col3) face opposite directions → invert
+# Thighs: FL(col1) and BL(col3) are mirror-mounted      → invert
+# Calves: FL(col1) and BL(col3) are mirror-mounted      → invert
+#                                        FR   FL   BR   BL
+INVERSION_MASK = np.array([[1,   0,   0,   1],   # Hip
+                           [0,   1,   0,   1],   # Thigh
+                           [0,   1,   0,   1]], dtype=int)  # Calf
+
+# Tune these degree offsets until the robot stands level at default_z_ref.
+#                                          FR    FL    BR    BL
+CALIBRATION_OFFSETS = np.array([[ 15,   95,   95,    3],   # Hip
+                                [ 60,    1,   60,    8],   # Thigh
+                                [110, -110,  150,  -80]], dtype=float)  # Calf
 
 class HardwareInterface:
     def __init__(self, config):

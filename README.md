@@ -4,7 +4,7 @@
 > *"A Quadruped Robot Dog built to break the complexity barrier."*
 
 [![CI](https://github.com/SH047/ECHO_Q/actions/workflows/python-package.yml/badge.svg)](https://github.com/SH047/ECHO_Q/actions)
-[![Tests](https://img.shields.io/badge/tests-58%20passing-brightgreen)](#)
+[![Tests](https://img.shields.io/badge/tests-25%20passing-brightgreen)](#)
 [![ROS](https://img.shields.io/badge/ROS-Noetic-blue)](#)
 [![Python](https://img.shields.io/badge/python-3.8%20|%203.9%20|%203.10%20|%203.11-blue)](#)
 [![License](https://img.shields.io/badge/license-MIT-green)](#)
@@ -177,7 +177,7 @@ ECHO_Q/
 │   └── echo_q_utilities/
 │       └── src/.../Utilities.py    # Deadband · filters · rotation math
 │
-├── tests/                          # pytest test suite (58 tests)
+├── tests/                          # pytest test suite (25 tests)
 │   ├── conftest.py
 │   ├── test_utilities.py
 │   ├── test_kinematics.py
@@ -385,7 +385,7 @@ pip3 install pytest-cov --break-system-packages
 python -m pytest tests/ --cov=src --cov-report=term-missing
 ```
 
-Current: **58 tests · 3 modules** (Utilities, Kinematics, Gait)
+Current: **25 tests · 3 modules** (Utilities, Kinematics, Gait)
 
 ---
 

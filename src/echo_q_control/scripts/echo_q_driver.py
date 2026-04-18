@@ -37,6 +37,7 @@ class EchoQ_Driver:
         self.pub_joints   = rospy.Publisher("/echo_q/joint_states", JointState, queue_size=10)
         self.pub_odom     = rospy.Publisher("/echo_q/odom",         Odometry,   queue_size=10)
         self.pub_state    = rospy.Publisher("/echo_q/state",        String,     queue_size=10)
+        self.pub_contacts = rospy.Publisher("/echo_q/contacts",    String,     queue_size=10)
         self._tfb         = tf2_ros.TransformBroadcaster()
         rospy.Subscriber("/echo_q/imu/pitch", Float32, lambda m: setattr(self.state, 'pitch', m.data))
         rospy.Subscriber("/echo_q/imu/roll",  Float32, lambda m: setattr(self.state, 'roll',  m.data))
@@ -87,6 +88,7 @@ class EchoQ_Driver:
                 self._oy  += vel[0] * np.sin(self._oyaw) * dt
                 self._oyaw+= self.state.yaw_rate * dt
             self.state.foot_contacts = contacts; self.state.ticks = tick
+            self.pub_contacts.publish(json.dumps(self.state.foot_contacts.tolist()))
             self._pub_joints(now); self._pub_odom(now)
             if tick % 5 == 0: self._pub_state()
             self.rate.sleep()

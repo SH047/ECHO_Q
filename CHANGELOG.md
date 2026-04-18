@@ -11,5 +11,5 @@
 - NavigationBridge with foot-slip emergency stop watchdog
 - Flask web dashboard with MJPEG camera stream and live telemetry
 - Arduino firmware for BNO055 → rosserial at 50 Hz with LED calibration indicator
-- 27-test pytest suite covering Utilities, Kinematics, and Gait modules
+- 25-test pytest suite covering Utilities, Kinematics, and Gait modules
 - GitHub Actions CI on Python 3.8–3.11

@@ -56,7 +56,7 @@ To build ECHO-Q, you need the following components:
     ```bash
     mkdir -p ~/echo_q_ws/src
     cd ~/echo_q_ws/src
-    git clone [https://github.com/SH047/ECHO_Q.git](https://github.com/SH047/ECHO_Q.git) .
+    git clone https://github.com/SH047/ECHO_Q.git .
     ```
 
 2.  **Install Dependencies:**
@@ -100,12 +100,14 @@ Once the robot is running, open a browser on your laptop/phone and visit:
 ### PS4 Controller Map
 | Button | Action | Description |
 | :--- | :--- | :--- |
-| **L1** | **ARM / DISARM** | Activates the robot from REST mode. |
+| **L1** | **ARM / DISARM** | Toggles the robot between REST and TROT mode. |
 | **R1** | **Trot Mode** | Switches to Trotting gait. |
-| **X** | **Hop** | Triggers a jump (Experimental). |
+| **R2** | **Navigate Mode** | Switches to autonomous navigation mode. |
+| **✕** | **Hop** | Triggers a jump (Experimental). |
 | **Left Stick** | **Move (X/Y)** | Forward/Backward & Strafe Left/Right. |
-| **Right Stick** | **Look (Yaw)** | Rotate the robot left/right. |
-| **D-Pad** | **Adjust Height** | Up/Down adjusts body height. |
+| **Right Stick** | **Look (Yaw/Pitch)** | Rotate the robot left/right; lean forward/back. |
+| **D-Pad ↑↓** | **Adjust Height** | Up/Down adjusts body height. |
+| **D-Pad ←→** | **Adjust Roll** | Left/Right adjusts body roll. |
 
 ---
 

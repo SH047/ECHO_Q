@@ -33,6 +33,7 @@ ECHO-Q is a high-performance, open-source quadrupedal robot built as a **Final Y
 - [Running Tests](#running-tests)
 - [Firmware](#firmware)
 - [Troubleshooting](#troubleshooting)
+- [Useful Commands](#useful-commands)
 
 ---
 
@@ -419,3 +420,17 @@ Flash via Arduino IDE (Board: Nano, Processor: ATmega328P Old Bootloader).
 **Developed by Shreyas S Rai · Rajarajeshwari College of Engineering**
 
 [LinkedIn](https://www.linkedin.com/in/shreyas-s-rai/) · [Gallery & Assets](https://drive.google.com/drive/folders/1M44qh0k5k6DG8-52khi2ZnXKBumhORSk)
+
+---
+
+## Useful Commands
+
+A full command cheat sheet covering build, launch modes, topic inspection, diagnostics, and tests is in [`COMMANDS.md`](COMMANDS.md).
+
+---
+
+## Acknowledgements
+
+ECHO-Q's locomotion core is adapted from [DingoQuadruped](https://github.com/Yerbert/DingoQuadruped) (MIT License), which itself builds on the [Stanford Pupper](https://github.com/stanfordroboticsclub/StanfordQuadruped) and [notspot](https://github.com/lnotspotl/notspot_sim_py) codebases. The analytical IK structure, phase-based gait controller, and Config/State/Command architecture all trace back to this lineage.
+
+ECHO-Q extends these foundations with a full ROS Navigation Stack (GMapping SLAM + AMCL + move\_base), BNO055 IMU integration via rosserial, RPLiDAR A1 SLAM, a Flask web dashboard with MJPEG streaming, NavigationBridge with foot-slip emergency stop, and a 4-bar linkage correction layer on top of the base IK.

@@ -13,11 +13,10 @@ current_frame = None
 def camera_callback(msg):
     global current_frame
     # Convert ROS CompressedImage to OpenCV format
-    np_arr = np.fromstring(msg.data, np.uint8)
+    np_arr = np.frombuffer(msg.data, np.uint8)
     current_frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
 
 def generate_frames():
-    global current_frame
     while True:
         if current_frame is not None:
             # Encode the frame as JPEG
